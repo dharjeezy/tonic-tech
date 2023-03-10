@@ -5,6 +5,8 @@ This is a repo containing the assessment for
 1. FizzBuzz function
 2. Banking APIs
 
+## FizzBuzz
+You can find the FizzBuzz function in the current directory in the file named `fizzBuzz.js`
 
 ## Banking APIs
 
