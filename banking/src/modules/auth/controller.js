@@ -17,7 +17,16 @@ const signIn = cat('Signs In A User', async (req, res) => {
         .json({ success: true, message: 'User signed in successfully', data:  validatedUser});
 });
 
+const refresh = cat('Refreshes Token For A User', async (req, res) => {
+    const validatedUser = await service.refresh(req, res);
+
+    return res
+        .status(200)
+        .json({ success: true, message: 'Token refreshed successfully', data:  validatedUser});
+});
+
 export default {
     signUp,
     signIn,
+    refresh
 };

@@ -11,6 +11,5 @@ export default {
         test: process.env.DB_TEST_URL,
     },
     jwtSecret: process.env.JWT_SECRET,
-    serverAppUrl: process.env.SERVER_APP_URL,
     bcryptHashSaltRounds: process.env.BCRYPT_HASH_SALT_ROUNDS,
 };

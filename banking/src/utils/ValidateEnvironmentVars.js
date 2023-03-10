@@ -59,11 +59,6 @@ const environmentVars = {
         env: [TEST, DEVELOPMENT, STAGING, PRODUCTION],
         defaultValue: 'debug',
     },
-    SERVER_APP_URL: {
-        severityLevel: 2,
-        env: [TEST, DEVELOPMENT, STAGING, PRODUCTION],
-        defaultValue: '',
-    },
 };
 
 const variableNames = Object.keys(environmentVars);

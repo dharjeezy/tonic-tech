@@ -4,7 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { log } from '../utils/logger';
 import routes from '../routes';
-import limiter from './rateLimit'
+import limiter from '../middleware/rateLimit'
 
 const app = express();
 app.use(express.json({

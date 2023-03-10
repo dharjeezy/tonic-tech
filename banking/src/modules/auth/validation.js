@@ -12,3 +12,7 @@ export const signIn = Joi.object({
     email: Joi.string().required(),
     password: Joi.string().required(),
 });
+
+export const refresh = Joi.object({
+    refreshToken: Joi.string().required(),
+});

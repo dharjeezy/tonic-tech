@@ -2,14 +2,15 @@ import {
     Account,
 } from './model';
 import ServiceError from '../../helpers/ServiceError';
+import {User} from "../auth/model";
 
 const createAccount = async ({userId}) => {
     try {
-        //TODO: optimize this, account number can get duplicated
         const accountNumber = generateAccountNumber();
-        const account = new Account({ userId, accountNumber });
 
-        await account.save();
+        // Just putting a Default balance
+        const balance = 1000000
+        const account = await Account({ userId, accountNumber, balance }).save();
 
         return account;
     } catch (err) {
@@ -19,23 +20,22 @@ const createAccount = async ({userId}) => {
 };
 
 const transfer = async (req, res) => {
-    try {
-        const { toAccountId, amount } = req.body;
+        const { toAccountNumber, amount } = req.body;
         const fromAccountId = req.userId;
 
-        // check if from and to accounts are different
-        if (toAccountId === fromAccountId) {
-            throw new ServiceError('Cannot transfer to the same account', 400);
-        }
-
         // get from account
-        const fromAccount = await Account.findById(fromAccountId);
+        const fromAccount = await Account.findOne({userId: fromAccountId});
         if (!fromAccount) {
             throw new ServiceError('from Account not found', 404);
         }
 
+        // check if from and to accounts are different
+        if (toAccountNumber === fromAccount.accountNumber) {
+            throw new ServiceError('Cannot transfer to the same account', 400);
+        }
+
         // get to account
-        const toAccount = await Account.findById(toAccountId);
+        const toAccount = await Account.findOne({accountNumber: toAccountNumber});
         if (!toAccount) {
             throw new ServiceError('to Account not found', 404);
         }
@@ -52,10 +52,6 @@ const transfer = async (req, res) => {
         await Promise.all([fromAccount.save(), toAccount.save()]);
 
         return fromAccount;
-    } catch (err) {
-        console.error(err);
-        throw new ServiceError('Something went wrong while trying to transfer...', 500);
-    }
 };
 
 function generateAccountNumber() {

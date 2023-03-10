@@ -8,17 +8,32 @@ export function generateAccessToken(userId, role) {
     return jwt.sign({ userId, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 }
 
-export const authenticate = (role) => async (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
+export function refreshToken(userId, role) {
+    return jwt.sign(
+        { userId , role},
+        process.env.JWT_SECRET,
+        {
+            expiresIn: '7d',
+        }
+    );
+}
 
+
+export function decodeToken(refreshToken) {
+    return jwt.verify(refreshToken, process.env.JWT_SECRET);
+}
+
+const authenticate = (role) => async (req, res, next) => {
+    const authHeader = req.header('Authorization');
+
+    try {
         if (!authHeader) {
             return res.status(401).json({ message: "Authorization header not found." });
         }
 
         const [_, accessToken] = authHeader.split(" ");
 
-        jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+        jwt.verify(accessToken, process.env.JWT_SECRET, async (err, payload) => {
             if (err) {
                 return res.status(401).json({ message: "Invalid access token." });
             }
